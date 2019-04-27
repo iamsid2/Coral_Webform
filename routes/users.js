@@ -79,7 +79,7 @@ router.post("/delete", function(req, res, next) {
       reqemail = f["emailId"];
     }
   });
-  var mysql = "DELETE FROM userName WHERE emailId = '" + email + "' ";
+  var mysql = "DELETE FROM userData WHERE emailId = '" + email + "' ";
   connection.query(mysql, function(err, result) {
     if (err) throw err;
     console.log(" record(s) deleted");
