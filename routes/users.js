@@ -10,9 +10,16 @@ router.get("/", function(req, res, next) {
 router.get("/edit", function(req, res, next) {
   res.render("main/edit", { title: "Coral-Webform" });
 });
+router.get("/delete", function(req, res, next) {
+  res.render("main/delete", { title: "Coral-Webform" });
+});
 
 router.get("/successEdit", function(req, res, next) {
   res.render("main/sucEdit", { title: "Coral-Webform" });
+});
+
+router.get("/successDel", function(req, res, next) {
+  res.render("main/sucDel", { title: "Coral-Webform" });
 });
 
 router.post("/edit", function(req, res, next) {
@@ -51,6 +58,33 @@ router.post("/edit", function(req, res, next) {
     console.log(" record(s) updated");
     // res.send("Updated Successfully");
     res.redirect("/users/successEdit");
+  });
+});
+
+router.post("/delete", function(req, res, next) {
+  console.log(req.body);
+  var email = req.body.emaild;
+  var reqemail = "";
+  connection.query("SELECT * FROM userData", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.json({ error: true });
+    } else {
+      // console.log(">>RowData", result);
+      var inString = JSON.stringify(result);
+      // console.log(">> string: ", inString);
+      var udata = JSON.parse(inString);
+      // console.log(udata);
+      var f = udata.find(el => el.emailId === email);
+      reqemail = f["emailId"];
+    }
+  });
+  var mysql = "DELETE FROM userName WHERE emailId = '" + email + "' ";
+  connection.query(mysql, function(err, result) {
+    if (err) throw err;
+    console.log(" record(s) deleted");
+    // res.send("Updated Successfully");
+    res.redirect("/users/successDel");
   });
 });
 
